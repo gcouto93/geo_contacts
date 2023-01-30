@@ -6,7 +6,7 @@ import 'package:geo_contacts/repository/contact_repository.dart';
 import 'package:provider/provider.dart';
 import '../../utility/app_routes.dart';
 import 'custom_exit.dart';
-import 'custom_tile.dart';
+import 'custom_tile_delete_user.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({Key? key}) : super(key: key);
@@ -105,6 +105,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   ],
                 ),
                 CustomExit(),
+                CustomTileDeleteUser('Deletar conta'),
               ],
             ),
           ],

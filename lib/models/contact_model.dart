@@ -73,7 +73,8 @@ class ContactModel {
     ContactModelFields.longitude: longitude,
   };
 
-
-
-
+  @override
+  String toString() {
+    return 'ContactModel{nome: $nome, cpf: $cpf, telefone: $telefone, uf: $uf, cidade: $cidade, rua: $rua, numero: $numero, cep: $cep, usuarioCriador: $usuarioCriador, latitude: $latitude, longitude: $longitude}';
+  }
 }

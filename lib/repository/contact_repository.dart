@@ -39,6 +39,12 @@ class ContactRepository {
       whereArgs: [nome]
     );
   }
+  Future<void> deleteAllContacts()async{
+    final db = await _instance.database;
+    await db.delete(
+      tableContact,
+    );
+  }
 
 
 }
