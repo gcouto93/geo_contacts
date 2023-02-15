@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'dart:convert';
 
+import '../models/contact_model.dart';
 import '../providers/contact_provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,8 +28,11 @@ class _HomePageState extends State<HomePage> {
 
   String? emailUser = '';
 
+
+
   @override
   Widget build(BuildContext context) {
+
 
     Provider.of<ContactProvider>(context).setListContact(context);
     try{
@@ -45,12 +49,16 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
 
       ),
-      body: GoogleMap(
-          initialCameraPosition: CameraPosition(
-            target: LatLng(-25.536738,-49.243983),
-            zoom: 15,
-          )
-      ),
+      body:Consumer<ContactProvider>(builder: (context, prov, child) {
+        return GoogleMap(
+            markers: prov.listMarks,
+            initialCameraPosition: CameraPosition(
+              target: LatLng(-25.5364929,-49.2441089),
+              zoom: 5,
+
+            )
+        );
+      }) ,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
           onPressed: (){

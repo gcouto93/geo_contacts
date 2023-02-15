@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:geo_contacts/models/contact_model.dart';
+import 'package:geo_contacts/pages/home_page.dart';
 import 'package:geo_contacts/providers/contact_provider.dart';
 import 'package:geo_contacts/repository/contact_repository.dart';
+import 'package:location_geocoder/location_geocoder.dart';
 import 'package:provider/provider.dart';
 import '../../utility/app_routes.dart';
 import 'custom_exit.dart';
@@ -59,7 +61,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         icon: Icons.flag_outlined,
                         caption: 'Excluir',
                         onTap: () {
-                          _deleteItem(prov.listContact[index].nome!);
+                          _deleteItem(prov.listContact[index].nome!,prov,prov.listContact[index]);
                         },
                       )
                     ],
@@ -76,7 +78,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     actionPane: const SlidableStrechActionPane(),
                     child: ListTile(
                       onTap: () {
-
+                        itemListClick(prov,prov.listContact[index]);
                       },
                       title: Text(prov.listContact[index].nome!),
                       // trailing: Text(listResponse[index].uf!),
@@ -115,7 +117,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
       ),
     );
   }
-  void _deleteItem(String nome){
+  void _deleteItem(String nome, ContactProvider contactProvider,ContactModel contactModel){
     showDialog(
       context: context,
       builder: (context) {
@@ -144,6 +146,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
                 ContactRepository().delete(nome);
+                contactProvider.deleteMarkerProv(contactModel);
                 setState(() {
 
                 });
@@ -201,6 +204,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
       );
     },
   );
+
+  }
+
+  void itemListClick(ContactProvider contactProvider,ContactModel contactModel) async {
+
+    contactProvider.addMarkerProv(contactModel);
+    setState(() {
+
+    });
 
   }
 }

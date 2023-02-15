@@ -7,6 +7,8 @@ import 'package:geo_contacts/providers/contact_provider.dart';
 import 'package:geo_contacts/repository/contact_repository.dart';
 import 'package:geo_contacts/utility/app_routes.dart';
 import 'package:http/http.dart' as http;
+import 'package:geocoding/geocoding.dart';
+import 'package:location_geocoder/location_geocoder.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 
@@ -273,6 +275,14 @@ class _CreateContactPageState extends State<CreateContactPage> {
     }else if (txtCep.text.isEmpty) {
       _showAlertCreateContact('Preencher CEP');
     }else{//todos preenchidos
+      var enderecoCompleto = "${txtNumero.text} ${txtRua.text}, ${txtCidade.text}, ${txtUf.text}, Brazil";
+      List<Location?> locList = await latLngFromAdress(enderecoCompleto);
+      String lat = '0';
+      String lng = '0';
+      if(locList != null && locList.isNotEmpty){
+        lat = locList.first!.latitude.toString();
+        lng = locList.first!.longitude.toString();
+      }
       ContactModel contactModel = ContactModel(
         nome: txtNome.text,
         cpf: txtCpf.text,
@@ -283,18 +293,21 @@ class _CreateContactPageState extends State<CreateContactPage> {
         numero: txtNumero.text,
         cep: txtCep.text,
         usuarioCriador: _emailUserCreateContact,
-        latitude: '0',
-        longitude: '0'
+        latitude: lat,
+        longitude: lng
       );
       if(update){
         await ContactRepository().updateContact(contactModel);
         Navigator.of(context).pushNamed(AppRoutes.Home);
         return;
       }
+
+
       var listaContatosExistentes = await ContactRepository().readAllContactsFromUserCreator(contactModel);
       if(listaContatosExistentes.isEmpty){
         ContactRepository().createContact(contactModel);
         Navigator.of(context).pushNamed(AppRoutes.Home);
+        return;
       }
       for(var itemAuxContact in listaContatosExistentes) {
         if(itemAuxContact.nome == txtNome.text){
@@ -309,5 +322,16 @@ class _CreateContactPageState extends State<CreateContactPage> {
       Navigator.of(context).pushNamed(AppRoutes.Home);
     }
 
+  }
+
+  Future <List<Location?>>  latLngFromAdress(String endereco) async {
+    // const _apiKey = 'AIzaSyC1t0BHrpIABPU6MLn4BjpRcnSDi5qNE5A';//consulta lat/long a partir do endereço
+    // final LocatitonGeocoder geocoder = LocatitonGeocoder(_apiKey);
+    // final address = await geocoder.findAddressesFromQuery('sao paulo,sao paulo');
+
+    // List<Location> locations = await locationFromAddress('221 expedicionario adir jorge, curitiba, parana, brazil');
+    List<Location> locations = await locationFromAddress(endereco);
+    print(locations.toString());
+    return locations;
   }
 }
