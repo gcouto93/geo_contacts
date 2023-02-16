@@ -29,7 +29,7 @@ class ContactProvider with ChangeNotifier implements IContactProvider {
             markerId: MarkerId(contactProv.nome!),
             position: LatLng(double.parse(contactProv.latitude!), double.parse(contactProv.longitude!)),
             infoWindow: InfoWindow(
-              title: '${contactProv.nome} - ${contactProv.uf} - ${contactProv.cidade}, ${contactProv.rua}, N.:${contactProv.numero}',
+              title: '${contactProv.nome} - ${contactProv.cidade}/${contactProv.uf}, ${contactProv.rua}, n.: ${contactProv.numero}',
             )
         )
     );
