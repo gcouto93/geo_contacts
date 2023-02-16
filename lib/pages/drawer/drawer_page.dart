@@ -209,10 +209,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   void itemListClick(ContactProvider contactProvider,ContactModel contactModel) async {
 
-    contactProvider.addMarkerProv(contactModel);
+    await contactProvider.addMarkerProv(contactModel);
     setState(() {
 
     });
+    Navigator.of(context).pop();
 
   }
 }

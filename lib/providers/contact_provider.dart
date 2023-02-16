@@ -36,8 +36,15 @@ class ContactProvider with ChangeNotifier implements IContactProvider {
     notifyListeners();
   }
   deleteMarkerProv(ContactModel contactDelet) {
-    _markers= <Marker>{};
-    notifyListeners();
+    // _markers= <Marker>{};
+    try{
+
+      Marker mark = _markers.firstWhere((element) => element.markerId.value == contactDelet.nome);//identifica a marcação p/ excluir
+      _markers.remove(mark);
+      notifyListeners();
+    }catch(e){
+
+    }
   }
 
 }
